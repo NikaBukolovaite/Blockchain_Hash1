@@ -1,4 +1,7 @@
-def greet(name):
-	return f"Hello, {name}!"
+#pradines konstantos
+BLOCK = 16
 
-print (greet("Nastia"))
+IV_LEFT = bytes.fromhex("0123456789abcdeffedcba9876543210")
+IV_RIGHT = bytes.fromhex("fedcba98765432100123456789abcdef")
+
+FINAL_CONST = bytes.fromhex('ffffffffffffffffffffffffffffffff')
