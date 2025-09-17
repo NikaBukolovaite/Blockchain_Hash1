@@ -14,3 +14,8 @@ def pad_message(message: bytes) -> bytes:
     padded += b'\x00' * num_of_zeros
     padded += message_in_bits.to_bytes(8, 'big')
     return padded
+  
+def xor_bytes(a: bytes, b: bytes) -> bytes:
+  if len(a) != len(b):
+      raise ValueError("Ilgiai turi sutapti")
+  return bytes([x ^ y for x, y in zip(a, b)])
