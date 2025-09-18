@@ -1,4 +1,6 @@
+from Crypto.Cipher import AES
 #pradines konstantos
+
 BLOCK = 16
 
 IV_LEFT = bytes.fromhex("0123456789abcdeffedcba9876543210")
@@ -19,3 +21,25 @@ def xor_bytes(a: bytes, b: bytes) -> bytes:
   if len(a) != len(b):
       raise ValueError("Ilgiai turi sutapti")
   return bytes([x ^ y for x, y in zip(a, b)])
+
+def aes_hashing(message: bytes) -> bytes:
+
+    state_left = IV_LEFT
+    state_right = IV_RIGHT
+    padded_message = pad_message(message)
+
+    for i in range(0, len(padded_message), BLOCK):
+        Mi = padded_message[i:i + BLOCK]
+
+        cipher = AES.new(state_left, AES.MODE_ECB)
+        encrypted = cipher.encrypt(state_right)
+
+        state_right = xor_bytes(encrypted, Mi)
+        state_left, state_right = state_right, state_left
+
+    cipher = AES.new(state_left, AES.MODE_ECB)
+    final_enc = cipher.encrypt(FINAL_CONST)
+
+    return final_enc
+
+
