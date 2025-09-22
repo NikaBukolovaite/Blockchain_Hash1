@@ -1,4 +1,6 @@
 from Crypto.Cipher import AES
+import os
+import sys
 #pradines konstantos
 
 BLOCK = 16
@@ -42,4 +44,26 @@ def aes_hashing(message: bytes) -> bytes:
 
     return final_enc
 
+def main():
+    choice = input("1 - ivedimas ranka, 2 - skaitymas is failo")
+
+    if choice == "1":
+        user_message = input("Iveskite zinute: ")
+    elif choice == "2":
+        file_path = input("Iveskite failo pavadinima: ")
+        if not os.path.exists(file_path):
+            print("Failas neegzsituoja")
+            sys.exit(1)
+        with open(file_path, "rb") as file:
+            user_message = file.read()
+    else:
+        print("neteisinga ivestis")
+
+    digest = aes_hashing(user_message)
+    output_file = "output.txt"
+    with open(output_file, "wb") as file:
+        file.write(digest.hex())
+
+if __name__ == "__main__":
+    main()
 
