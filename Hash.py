@@ -1,7 +1,6 @@
 from Crypto.Cipher import AES
 import os
 import sys
-#pradines konstantos
 
 BLOCK = 16
 
@@ -50,7 +49,16 @@ def main():
     if choice == "1":
         user_message = input("Iveskite zinute: ")
     elif choice == "2":
-        file_path = input("Iveskite failo pavadinima: ")
+        choice_2 = input("Koki faila norite atidaryti? 1 - failai su vienu simboliu 2 - failai su daug atsitiktinių simbolių 3 -failai su daug atsitiktinių simbolių, kurie skiriasi tik vienu simboliu, 4 -tuscias: ")
+        if choice_2 == "1":
+            file_path = "file1.txt"
+        elif choice_2 == "2":
+            file_path = "file2.txt"
+        elif choice_2 == "3":
+            file_path = "file3.txt"
+        elif choice_2 == "3":
+            file_path = "empty.txt"
+
         if not os.path.exists(file_path):
             print("Failas neegzsituoja")
             sys.exit(1)
@@ -61,7 +69,7 @@ def main():
 
     digest = aes_hashing(user_message)
     output_file = "output.txt"
-    with open(output_file, "wb") as file:
+    with open(output_file, "w") as file:
         file.write(digest.hex())
 
 if __name__ == "__main__":
