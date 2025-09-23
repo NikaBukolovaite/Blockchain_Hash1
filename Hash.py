@@ -43,29 +43,38 @@ def aes_hashing(message: bytes) -> bytes:
 
     return final_enc
 
+def choose_file(folder: str = "nuskaitymo_failai") -> bytes:
+    files = [f for f in os.listdir(folder) if os.path.isfile(os.path.join(folder, f))]
+    if not files:
+        print("Aplankale nėra failų")
+        sys.exit(1)
+
+    for i, file in enumerate(files, start=1):
+        print(f"{i} - {file}")
+
+    while True:
+        choice = input("Pasirinkite failą (numerį): ")
+        try:
+            index = int(choice) - 1
+            file_path = os.path.join(folder, files[index])
+            with open(file_path, "rb") as f:
+                return f.read()
+        except (IndexError, ValueError):
+            print("Neteisingas pasirinkimas, bandykite dar kartą. ")
+            continue
+
 def main():
-    choice = input("1 - ivedimas ranka, 2 - skaitymas is failo")
+    while True:
+        choice = input("1 - ivedimas ranka, 2 - skaitymas is failo: ")
 
-    if choice == "1":
-        user_message = input("Iveskite zinute: ").encode('utf-8')
-    elif choice == "2":
-        choice_2 = input("Koki faila norite atidaryti? 1 - failai su vienu simboliu 2 - failai su daug atsitiktinių simbolių 3 -failai su daug atsitiktinių simbolių, kurie skiriasi tik vienu simboliu, 4 -tuscias: ")
-        if choice_2 == "1":
-            file_path = "file1.txt"
-        elif choice_2 == "2":
-            file_path = "file2.txt"
-        elif choice_2 == "3":
-            file_path = "file3.txt"
-        elif choice_2 == "3":
-            file_path = "empty.txt"
-
-        if not os.path.exists(file_path):
-            print("Failas neegzsituoja")
-            sys.exit(1)
-        with open(file_path, "rb") as file:
-            user_message = file.read()
-    else:
-        print("neteisinga ivestis")
+        if choice == "1":
+            user_message = input("Iveskite zinute: ").encode('utf-8')
+            break
+        elif choice == "2":
+            user_message = choose_file("nuskaitymo_failai")
+            break
+        else:
+            print("Neteisinga įvestis, bandykite dar kartą.")
 
     digest = aes_hashing(user_message)
     output_file = "output.txt"
