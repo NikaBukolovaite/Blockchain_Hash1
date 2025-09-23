@@ -86,27 +86,83 @@ def toy_hash_hex(data: Union[str, bytes], seed: int = 0) -> str:
 
 def main():
     if len(sys.argv) > 1:
-        if sys.argv[-1].lower() in ["--aes", "--toy"]:
-            flag = sys.argv[-1].lower()
-            file_paths = sys.argv[1:-1]
-        else:
-            flag = None
-            file_paths = sys.argv[1:]
+        raw_args = sys.argv[1:]
+
+        flags = [a for a in raw_args if a.startswith("--")]
+        candidates = [a for a in raw_args if not a.startswith("--")]
+
+        flag = None
+        if len(flags) > 1:
+            known_flags = [f for f in flags if f.lower() in ("--aes", "--toy")]
+            if len(known_flags) > 1:
+                print("Negalite naudoti kelių hash funkcijų vienu metu. Naudosime paskutinį žinomą flag'ą:", known_flags[-1])
+                flag = known_flags[-1].lower()
+            elif len(known_flags) == 1:
+                flag = known_flags[0].lower()
+            else:
+                print("Nėra žinomų flag'ų. Galimi flag'ai: --aes, --toy")
+                flag = None
+        elif len(flags) == 1:
+            if flags[0].lower() in ("--aes", "--toy"):
+                flag = flags[0].lower()
+            else:
+                print("Nežinomas flag'as:", flags[0])
+                flag = None
+
+        file_paths = candidates
 
         if not file_paths:
             print("Nenurodytas nė vienas failas")
-            sys.exit(1)
+
+            while True:
+                fallback = input("Nėra failų. 1 - pasirinkti failą iš nuskaitymo_failai, 2 - įvesti tekstą ranka: ")
+                if fallback == "1":
+                    file_data = choose_file("nuskaitymo_failai")
+                    if flag is None:
+                        while True:
+                            g = input("Pasirinkite hash (1 - AES, 2 - Toy): ")
+                            if g in ("1","2"):
+                                break
+                            print("Neteisinga įvestis.")
+                        if g == "1":
+                            digest_hex = aes_hashing(file_data).hex()
+                        else:
+                            digest_hex = toy_hash_hex(file_data)
+                    else:
+                        digest_hex = aes_hashing(file_data).hex() if flag=="--aes" else toy_hash_hex(file_data)
+                    with open("output.txt","w") as fout:
+                        fout.write(digest_hex)
+                    print("Hash:", digest_hex)
+                    return
+                elif fallback == "2":
+                    txt = input("Įveskite žinutę: ")
+                    if flag is None:
+                        while True:
+                            g = input("Pasirinkite hash (1 - AES, 2 - Toy): ")
+                            if g in ("1","2"):
+                                break
+                            print("Neteisinga įvestis.")
+                        if g == "1":
+                            digest_hex = aes_hashing(txt.encode("utf-8")).hex()
+                        else:
+                            digest_hex = toy_hash_hex(txt)
+                    else:
+                        digest_hex = aes_hashing(txt.encode("utf-8")).hex() if flag=="--aes" else toy_hash_hex(txt)
+                    with open("output.txt","w") as fout:
+                        fout.write(digest_hex)
+                    print("Hash:", digest_hex)
+                    return
+                else:
+                    print("Neteisinga įvestis, bandykite dar kartą.")
 
         global_choice = None
         if flag is None:
             while True:
-                global_choice = input("Pasirinkite hash funkciją visiems failams (1 - AES, 2 - ChatGPT): ")
+                global_choice = input("Pasirinkite hash funkciją visiems failams (1 - AES, 2 - Toy): ")
                 if global_choice in ["1", "2"]:
                     break
-                else:
-                    print("Neteisinga įvestis, bandykite dar kartą.")
+                print("Neteisinga įvestis, bandykite dar kartą.")
 
-        # Apdorojam visus failus
         output_file = "output.txt"
         with open(output_file, "w") as outfile:
             for file_path in file_paths:
@@ -115,9 +171,17 @@ def main():
                         user_message = f.read()
                 else:
                     print("Tokio failo nėra:", file_path)
-                    continue
+                    while True:
+                        fallback = input("1 - pasirinkite kitą failą, 2 - įveskite tekstą ranka: ")
+                        if fallback == "1":
+                            user_message = choose_file("nuskaitymo_failai")
+                            break
+                        elif fallback == "2":
+                            user_message = input("Įveskite žinutę: ").encode("utf-8")
+                            break
+                        else:
+                            print("Neteisinga įvestis, bandykite dar kartą.")
 
-                # Hash skaičiavimas
                 if flag == "--aes" or global_choice == "1":
                     digest_hex = aes_hashing(user_message).hex()
                 elif flag == "--toy" or global_choice == "2":
@@ -133,11 +197,11 @@ def main():
     
     else:
         while True:
-            choice = input("1 - Nastios ir Nikos hash, 2 - Chat gpt hash: ")
+            choice = input("1 - AES hash, 2 - Toy hash: ")
 
             if choice == "1":
                 while True:
-                    sub_choice = input("1 - ivedimas ranka, 2 - skaitymas is failo: ")
+                    sub_choice = input("1 - įvedimas ranka, 2 - skaitymas iš failo: ")
 
                     if sub_choice == "1":
                         user_message = input("Iveskite zinute: ").encode('utf-8')
@@ -156,7 +220,7 @@ def main():
                     sub_choice = input("1 - įvedimas ranka, 2 - skaitymas iš failo: ")
 
                     if sub_choice == "1":
-                        user_message = input("Įveskite žinutę ChatGPT hash skaičiavimui: ")
+                        user_message = input("Įveskite žinutę Toy hash skaičiavimui: ")
                         digest_hex = toy_hash_hex(user_message)
                         break
                     elif sub_choice == "2":
