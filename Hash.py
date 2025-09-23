@@ -1,6 +1,7 @@
 from Crypto.Cipher import AES
 import os
 import sys
+from typing import Union
 
 BLOCK = 16
 
@@ -63,23 +64,59 @@ def choose_file(folder: str = "nuskaitymo_failai") -> bytes:
             print("Neteisingas pasirinkimas, bandykite dar kartą. ")
             continue
 
+#Chat GPT hash
+
+def toy_hash(data: Union[str, bytes], seed: int = 0) -> int:
+    if isinstance(data, str):
+        data = data.encode("utf-8")
+
+    offset = 0xCBF29CE484222325
+    prime = 0x100000001B3
+    mask = (1 << 64) - 1
+
+    h = (offset ^ (seed & mask)) & mask
+    for b in data:
+        h ^= b
+        h = (h * prime) & mask
+    return h
+
+
+def toy_hash_hex(data: Union[str, bytes], seed: int = 0) -> str:
+    return f"{toy_hash(data, seed):016x}"
+
 def main():
     while True:
-        choice = input("1 - ivedimas ranka, 2 - skaitymas is failo: ")
+        choice = input("1 - Nastios ir Nikos hash, 2 - Chat gpt hash: ")
 
         if choice == "1":
-            user_message = input("Iveskite zinute: ").encode('utf-8')
+            while True:
+                sub_choice = input("1 - ivedimas ranka, 2 - skaitymas is failo: ")
+
+                if sub_choice == "1":
+                    user_message = input("Iveskite zinute: ").encode('utf-8')
+                    break
+                elif sub_choice == "2":
+                    user_message = choose_file("nuskaitymo_failai")
+                    break
+                else:
+                    print("Neteisinga įvestis, bandykite dar kartą.")
+
+            digest_hex = aes_hashing(user_message).hex()
             break
+
         elif choice == "2":
-            user_message = choose_file("nuskaitymo_failai")
+            user_message = input("Įveskite žinutę ChatGPT hash skaičiavimui: ")
+            digest_hex = toy_hash_hex(user_message)
             break
+
         else:
             print("Neteisinga įvestis, bandykite dar kartą.")
 
-    digest = aes_hashing(user_message)
     output_file = "output.txt"
     with open(output_file, "w") as file:
-        file.write(digest.hex())
+        file.write(digest_hex)
+
+    print("Hash išsaugotas faile:", output_file)
 
 if __name__ == "__main__":
     main()
