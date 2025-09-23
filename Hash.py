@@ -105,8 +105,20 @@ def main():
             break
 
         elif choice == "2":
-            user_message = input("Įveskite žinutę ChatGPT hash skaičiavimui: ")
-            digest_hex = toy_hash_hex(user_message)
+            while True:
+                sub_choice = input("1 - įvedimas ranka, 2 - skaitymas iš failo: ")
+
+                if sub_choice == "1":
+                    user_message = input("Įveskite žinutę ChatGPT hash skaičiavimui: ")
+                    digest_hex = toy_hash_hex(user_message)
+                    break
+                elif sub_choice == "2":
+                    file_data = choose_file("nuskaitymo_failai")
+                    digest_hex = toy_hash_hex(file_data)
+                    break
+                else:
+                    print("Neteisinga įvestis, bandykite dar kartą.")
+
             break
 
         else:
@@ -116,6 +128,7 @@ def main():
     with open(output_file, "w") as file:
         file.write(digest_hex)
 
+    print("Hash:", digest_hex)
     print("Hash išsaugotas faile:", output_file)
 
 if __name__ == "__main__":
