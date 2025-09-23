@@ -47,7 +47,7 @@ def main():
     choice = input("1 - ivedimas ranka, 2 - skaitymas is failo")
 
     if choice == "1":
-        user_message = input("Iveskite zinute: ")
+        user_message = input("Iveskite zinute: ").encode('utf-8')
     elif choice == "2":
         choice_2 = input("Koki faila norite atidaryti? 1 - failai su vienu simboliu 2 - failai su daug atsitiktinių simbolių 3 -failai su daug atsitiktinių simbolių, kurie skiriasi tik vienu simboliu, 4 -tuscias: ")
         if choice_2 == "1":
