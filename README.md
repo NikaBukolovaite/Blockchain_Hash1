@@ -69,6 +69,14 @@ nuskaitymo_failai/file2.txt: <hash>
 
 # 🔬 Eksperimentinis tyrimas
 
+Norint paleisti tyrimą į komandinę eilutę reikia įrašyti:
+
+```bash
+python test_hash.py
+```
+
+Rezultatai atsiras faile test_hash.py
+
 # 💻 Kompiuterio charakteristikos (ant kurio buvo daromas eksperimentas)
 
 | Komponentas |      Specifikacija      |
