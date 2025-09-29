@@ -200,6 +200,28 @@ def run_tests():
     results.append(f"AES BIT vidutiniškai skiriasi: {aes_bit_diff_total / total_pairs_to_test:.2f}%, minimalus skirtumas: {aes_bit_diff_min:.2f}%, maksimalus skirtumas: {aes_bit_diff_max:.2f}%")
     results.append(f"TOY BIT vidutiniškai skiriasi: {toy_bit_diff_total / total_pairs_to_test:.2f}%, minimalus skirtumas: {toy_bit_diff_min:.2f}%, maksimalus skirtumas: {toy_bit_diff_max:.2f}%")
 
+	# Negrįžtamumo testas
+    results.append("\n---Negrįžtamumo testas---")
+
+    base_message = "LabaiSlaptasSlaptazodis1234567890"
+    salt_length = random.randint(5, 15)
+    salt = ''.join(random.choices(string.ascii_letters + string.digits, k=salt_length))
+
+    aes_hash_no_salt = aes_hashing(base_message.encode("utf-8")).hex()
+    toy_hash_no_salt = toy_hash_hex(base_message.encode("utf-8"))
+
+    aes_hash_with_salt = aes_hashing((base_message + salt).encode("utf-8")).hex()
+    toy_hash_with_salt = toy_hash_hex((base_message + salt).encode("utf-8"))
+
+    results.append(f"Originalus tekstas: {base_message}")
+    results.append(f"Naudota salt: {salt}")
+    results.append(f"AES hash be salt: {aes_hash_no_salt}")
+    results.append(f"AES hash su salt: {aes_hash_with_salt}")
+    results.append(f"TOY hash be salt: {toy_hash_no_salt}")
+    results.append(f"TOY hash su salt: {toy_hash_with_salt}")
+    results.append(f"AES skiriasi: {aes_hash_no_salt != aes_hash_with_salt}")
+    results.append(f"TOY skiriasi: {toy_hash_no_salt != toy_hash_with_salt}")
+
     for line in results:
         print(line)
 
