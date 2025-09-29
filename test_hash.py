@@ -100,42 +100,105 @@ def run_tests():
     else:
         results.append(f"Failas nerastas: {test_file}")
         
-    # Kolizijų paieškos testas
+	# Kolizijų paieškos testas
     results.append("\n---Kolizijų paieškos testas---")
-    
-    total_tests = 100
-    text_length = 100
+    lengths = [10, 100, 500, 1000]
+    for length in lengths:
+        aes_collisions = 0
+        toy_collisions = 0
+        total_pairs = 100000
+        
+        for _ in range(total_pairs):
+            s1 = ''.join(random.choices(string.ascii_letters + string.digits, k=length)).encode('utf-8')
+            s2 = ''.join(random.choices(string.ascii_letters + string.digits, k=length)).encode('utf-8')
 
-    original_strings = [ ''.join(random.choices(string.ascii_letters + string.digits, k=text_length)).encode('utf-8') for _ in range(total_tests)]
-    
-	modified_strings = []
-    for string in originas_strings:
-        string_list = list(string)
-        pos = random.randint(0, len(string_list)-1)
-        new_char = random.choice(string.ascii_letters + string.digits)
-        while new_char == string_list[pos]:
-            new_char = random.choice(string.ascii_letters + string.digits)
-        string_list[pos] = new_char
-        modified_strings.append("".join(string_list).encode("utf-8"))
+            if s1 == s2: #cia jei netycia sutampa string tai, kad praleistu ir neskaiciuotu kolizijos
+                continue
+
+            aes1 = aes_hashing(s1).hex()
+            aes2 = aes_hashing(s2).hex()
+            toy1 = toy_hash_hex(s1)
+            toy2 = toy_hash_hex(s2)
         
-	aes_bit_differences_total = aes_bit_differences_min = aes_bit_differences_max = 0
-	toy_bit_differences_total = toy_bit_differences_min = toy_bit_differences_max = 0
-    aes_hex_differences_total = aes_hex_differences_min = aes_hex_differences_max = 0
-	toy_hex_differences_total = toy_hex_differences_min = toy_hex_differences_max = 0
+            if aes1 == aes2:
+                aes_collisions += 1
+            if toy1 == toy2:
+                toy_collisions += 1
+                    
+        results.append(
+            f"Ilgis: {length} simbolių, Iš viso porų: {total_pairs}, "
+            f"AES kolizijos: {aes_collisions}, TOY kolizijos: {toy_collisions}"
+        )
+
+	# Lavinos efekto testas
+    results.append("\n---Lavinos efekto testas---")
+
+    total_pairs_to_test = 100000
+    input_string_length = 100
+
+    original_inputs = [
+        ''.join(random.choices(string.ascii_letters + string.digits, k=input_string_length))
+        for _ in range(total_pairs_to_test)
+    ]
     
-	aes_bit_differences_min = toy_bit_differences_min = aes_hex_differences_min = toy_hex_differences_min = 100
-    
-	for i in range(total_tests):
-		original = original_strings[i].encode('utf-8')
-		modified = modified_strings[i].encode('utf-8')
-        
-		aes1 = aes_hashing(original).hex()
-		aes2 = aes_hashing(modified).hex()
-        toy1 = toy_hash_hex(original)
-		toy2 = toy_hash_hex(modified)
-    
-		# HEX skirtumas
-        
+    modified_inputs = []
+    for original_input in original_inputs:
+        original_list = list(original_input)
+        position_to_change = random.randint(0, len(original_list) - 1)
+        new_random_character = random.choice(string.ascii_letters + string.digits)
+
+        while new_random_character == original_list[position_to_change]:
+            new_random_character = random.choice(string.ascii_letters + string.digits)
+
+        original_list[position_to_change] = new_random_character
+        modified_inputs.append("".join(original_list))
+
+    aes_hex_diff_total = aes_hex_diff_min = aes_hex_diff_max = 0
+    toy_hex_diff_total = toy_hex_diff_min = toy_hex_diff_max = 0
+    aes_bit_diff_total = aes_bit_diff_min = aes_bit_diff_max = 0
+    toy_bit_diff_total = toy_bit_diff_min = toy_bit_diff_max = 0
+    aes_hex_diff_min = toy_hex_diff_min = aes_bit_diff_min = toy_bit_diff_min = 100.0
+
+    for i in range(total_pairs_to_test):
+        original_bytes = original_inputs[i].encode("utf-8")
+        modified_bytes = modified_inputs[i].encode("utf-8")
+
+        aes_hash_original = aes_hashing(original_bytes).hex()
+        aes_hash_modified = aes_hashing(modified_bytes).hex()
+        toy_hash_original = toy_hash_hex(original_bytes)
+        toy_hash_modified = toy_hash_hex(modified_bytes)
+
+        # hex lygmens skirtumai (% simbolių, kurie skiriasi)
+        aes_hex_difference_percentage = sum(char_o != char_m for char_o, char_m in zip(aes_hash_original, aes_hash_modified)) / len(aes_hash_original) * 100
+        toy_hex_difference_percentage = sum(char_o != char_m for char_o, char_m in zip(toy_hash_original, toy_hash_modified)) / len(toy_hash_original) * 100
+
+        aes_hex_diff_total += aes_hex_difference_percentage
+        toy_hex_diff_total += toy_hex_difference_percentage
+        aes_hex_diff_min = min(aes_hex_diff_min, aes_hex_difference_percentage)
+        aes_hex_diff_max = max(aes_hex_diff_max, aes_hex_difference_percentage)
+        toy_hex_diff_min = min(toy_hex_diff_min, toy_hex_difference_percentage)
+        toy_hex_diff_max = max(toy_hex_diff_max, toy_hex_difference_percentage)
+
+        # bit lygmens skirtumai (% bitų, kurie skiriasi)
+        aes_bits_original = bin(int(aes_hash_original, 16))[2:].zfill(len(aes_hash_original) * 4)
+        aes_bits_modified = bin(int(aes_hash_modified, 16))[2:].zfill(len(aes_hash_modified) * 4)
+        toy_bits_original = bin(int(toy_hash_original, 16))[2:].zfill(len(toy_hash_original) * 4)
+        toy_bits_modified = bin(int(toy_hash_modified, 16))[2:].zfill(len(toy_hash_modified) * 4)
+
+        aes_bit_difference_percentage = sum(bit_o != bit_m for bit_o, bit_m in zip(aes_bits_original, aes_bits_modified)) / len(aes_bits_original) * 100
+        toy_bit_difference_percentage = sum(bit_o != bit_m for bit_o, bit_m in zip(toy_bits_original, toy_bits_modified)) / len(toy_bits_original) * 100
+
+        aes_bit_diff_total += aes_bit_difference_percentage
+        toy_bit_diff_total += toy_bit_difference_percentage
+        aes_bit_diff_min = min(aes_bit_diff_min, aes_bit_difference_percentage)
+        aes_bit_diff_max = max(aes_bit_diff_max, aes_bit_difference_percentage)
+        toy_bit_diff_min = min(toy_bit_diff_min, toy_bit_difference_percentage)
+        toy_bit_diff_max = max(toy_bit_diff_max, toy_bit_difference_percentage)
+
+    results.append(f"AES HEX vidutiniškai skiriasi: {aes_hex_diff_total / total_pairs_to_test:.2f}%, minimalus skirtumas: {aes_hex_diff_min:.2f}%, maksimalus skirtumas: {aes_hex_diff_max:.2f}%")
+    results.append(f"TOY HEX vidutiniškai skiriasi: {toy_hex_diff_total / total_pairs_to_test:.2f}%, minimalus skirtumas: {toy_hex_diff_min:.2f}%, maksimalus skirtumas: {toy_hex_diff_max:.2f}%")
+    results.append(f"AES BIT vidutiniškai skiriasi: {aes_bit_diff_total / total_pairs_to_test:.2f}%, minimalus skirtumas: {aes_bit_diff_min:.2f}%, maksimalus skirtumas: {aes_bit_diff_max:.2f}%")
+    results.append(f"TOY BIT vidutiniškai skiriasi: {toy_bit_diff_total / total_pairs_to_test:.2f}%, minimalus skirtumas: {toy_bit_diff_min:.2f}%, maksimalus skirtumas: {toy_bit_diff_max:.2f}%")
 
     for line in results:
         print(line)
