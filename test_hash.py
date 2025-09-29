@@ -100,35 +100,42 @@ def run_tests():
     else:
         results.append(f"Failas nerastas: {test_file}")
         
-	# Kolizijų paieška
-    results.append("\n---Kolizijų paieška---")
-    lengths = [10, 100, 500, 1000]
-    for length in lengths:
-        aes_collisions = 0
-        toy_collisions = 0
-        total_pairs = 100000
-        
-        for _ in range(total_pairs):
-            s1 = ''.join(random.choices(string.ascii_letters + string.digits, k=length)).encode('utf-8')
-            s2 = ''.join(random.choices(string.ascii_letters + string.digits, k=length)).encode('utf-8')
+    # Kolizijų paieškos testas
+    results.append("\n---Kolizijų paieškos testas---")
+    
+    total_tests = 100
+    text_length = 100
 
-            if s1 == s2: #cia jei netycia sutampa string tai, kad praleistu ir neskaiciuotu kolizijos
-                continue
-
-            aes1 = aes_hashing(s1).hex()
-            aes2 = aes_hashing(s2).hex()
-            toy1 = toy_hash_hex(s1)
-            toy2 = toy_hash_hex(s2)
+    original_strings = [ ''.join(random.choices(string.ascii_letters + string.digits, k=text_length)).encode('utf-8') for _ in range(total_tests)]
+    
+	modified_strings = []
+    for string in originas_strings:
+        string_list = list(string)
+        pos = random.randint(0, len(string_list)-1)
+        new_char = random.choice(string.ascii_letters + string.digits)
+        while new_char == string_list[pos]:
+            new_char = random.choice(string.ascii_letters + string.digits)
+        string_list[pos] = new_char
+        modified_strings.append("".join(string_list).encode("utf-8"))
         
-            if aes1 == aes2:
-                aes_collisions += 1
-            if toy1 == toy2:
-                toy_collisions += 1
-                    
-        results.append(
-            f"Ilgis: {length} simbolių, Iš viso porų: {total_pairs}, "
-            f"AES kolizijos: {aes_collisions}, TOY kolizijos: {toy_collisions}"
-        )
+	aes_bit_differences_total = aes_bit_differences_min = aes_bit_differences_max = 0
+	toy_bit_differences_total = toy_bit_differences_min = toy_bit_differences_max = 0
+    aes_hex_differences_total = aes_hex_differences_min = aes_hex_differences_max = 0
+	toy_hex_differences_total = toy_hex_differences_min = toy_hex_differences_max = 0
+    
+	aes_bit_differences_min = toy_bit_differences_min = aes_hex_differences_min = toy_hex_differences_min = 100
+    
+	for i in range(total_tests):
+		original = original_strings[i].encode('utf-8')
+		modified = modified_strings[i].encode('utf-8')
+        
+		aes1 = aes_hashing(original).hex()
+		aes2 = aes_hashing(modified).hex()
+        toy1 = toy_hash_hex(original)
+		toy2 = toy_hash_hex(modified)
+    
+		# HEX skirtumas
+        
 
     for line in results:
         print(line)
