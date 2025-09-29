@@ -69,6 +69,15 @@ nuskaitymo_failai/file2.txt: <hash>
 
 # 🔬 Eksperimentinis tyrimas
 
+Eksperimentinis tyrimas testuoja hash funcijas – AES pagrįstą hash ir paprastą ,,toy“ hash – pagal pagrindinius hash'o kriterijus:
+
+- Išvedimo dydis
+- Deterministiškumas
+- Efektyvumas
+- Kolizijos
+- Lavinos efektas
+- Negrįžtamumas
+
 Norint paleisti tyrimą į komandinę eilutę reikia įrašyti:
 
 ```bash
@@ -86,6 +95,15 @@ Rezultatai atsiras faile test_hash.py
 | DISK        |    SSD (NVMe) </br>     |
 
 # Išvedimo dydis
+
+Šis testas tikrina, ar hash funkcijos visada grąžina vienodo ilgio išvestį, neprilausomai nuo įvesties dydžio.
+
+#### Išvedimo dydžio testo rezultatai
+
+| Failas:         | nuskaitymo_failai/empty.txt | nuskaitymo_failai/one_symbol1.txt | nuskaitymo_failai/one_symbol2.txt |              | nuskaitymo_failai/empty.txt | nuskaitymo_failai/one_symbol1.txt | nuskaitymo_failai/one_symbol2.txt | nuskaitymo_failai/one_symbol3.txt | nuskaitymo_failai/one_symbol4.txt | nuskaitymo_failai/random1.txt | nuskaitymo_failai/random2.txt | nuskaitymo_failai/similar1a.txt | nuskaitymo_failai/similar1b.txt | nuskaitymo_failai/similar2a.txt | nuskaitymo_failai/similar2b.txt |
+| :-------------- | :-------------------------: | :-------------------------------: | :-------------------------------: | :----------: | :-------------------------: | :-------------------------------: | :-------------------------------: | :-------------------------------: | :-------------------------------: | :---------------------------: | :---------------------------: | ------------------------------- | ------------------------------- | ------------------------------- | ------------------------------- |
+| AES Hash ilgis: |        32 simboliai         |           32 simboliai            |           32 simboliai            | 32 simboliai |        32 simboliai         |           32 simboliai            |           32 simboliai            |           32 simboliai            |           32 simboliai            |         32 simboliai          |
+| TOY Hash ilgis: |         16 simbolių         |            16 simbolių            |            16 simbolių            | 16 simbolių  |         16 simbolių         |            16 simbolių            |            16 simbolių            |            16 simbolių            |            16 simbolių            |          16 simbolių          |          16 simbolių          |
 
 # Deterministiškumas
 
