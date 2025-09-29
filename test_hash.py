@@ -1,5 +1,7 @@
 import os
 import time
+import random
+import string
 from Hash import aes_hashing, toy_hash_hex
 
 def run_tests():
@@ -97,6 +99,33 @@ def run_tests():
 
     else:
         results.append(f"Failas nerastas: {test_file}")
+        
+	# Kolizijų paieška
+    results.append("\n---Kolizijų paieška---")
+    lengths = [10, 100, 500, 1000]
+    for length in lengths:
+        aes_collisions = {}
+		toy_collisions = {}
+        total_pairs = 100000
+        
+		for _ in range(total_pairs):
+            s1 = ''.join(random.choices(string.ascii_letters + string.digits, k=length)).encode('utf-8')
+			s2 = ''.join(random.choices(string.ascii_letters + string.digits, k=length)).encode('utf-8')
+        if s1 == s2:
+			continue	
+        
+		aes1 = aes_hashing(s1).hex()
+		aes2 = aes_hashing(s2).hex()
+        toy1 = toy_hash_hex(s1)
+		toy2 = toy_hash_hex(s2)
+        
+		if aes1 == aes2:
+              aes_collisions += 1
+		if toy1 == toy2:
+			  toy_collisions += 1
+                    
+		results.append(f"Ilgis: {length} simbolių, Iš viso porų: {total_pairs}, AES kolizijos: {aes_collisions}, TOY kolizijos: {toy_collisions}")
+
 
     for line in results:
         print(line)
