@@ -100,11 +100,13 @@ Rezultatai atsiras faile test_hash.py
 
 Šis testas tikrina, ar hash funkcijos visada grąžina vienodo ilgio išvestį, neprilausomai nuo įvesties dydžio - hash'uojami įvairaus dydžio failai ir tikrinamas hash ilgis.
 
-| Išvedimo dydžio testo rezultatai |                             |                                   |                                   |                                   |                                   |                               |                               |                                 |                                 |                                 |                                 |
-| :------------------------------- | :-------------------------: | :-------------------------------: | :-------------------------------: | :-------------------------------: | :-------------------------------: | :---------------------------: | :---------------------------: | :-----------------------------: | :-----------------------------: | :-----------------------------: | :-----------------------------: |
-| Failas:                          | nuskaitymo_failai/empty.txt | nuskaitymo_failai/one_symbol1.txt | nuskaitymo_failai/one_symbol2.txt | nuskaitymo_failai/one_symbol3.txt | nuskaitymo_failai/one_symbol4.txt | nuskaitymo_failai/random1.txt | nuskaitymo_failai/random2.txt | nuskaitymo_failai/similar1a.txt | nuskaitymo_failai/similar1b.txt | nuskaitymo_failai/similar2a.txt | nuskaitymo_failai/similar2b.txt |
-| AES Hash ilgis:                  |        32 simboliai         |           32 simboliai            |           32 simboliai            |           32 simboliai            |           32 simboliai            |         32 simboliai          |         32 simboliai          |          32 simboliai           |          32 simboliai           |          32 simboliai           |          32 simboliai           |
-| TOY Hash ilgis:                  |         16 simbolių         |            16 simbolių            |            16 simbolių            |            16 simbolių            |            16 simbolių            |          16 simbolių          |          16 simbolių          |           16 simbolių           |           16 simbolių           |           16 simbolių           |           16 simbolių           |
+#### Išvedimo dydžio testo rezultatai
+
+| Failas:         | nuskaitymo_failai/empty.txt | nuskaitymo_failai/one_symbol1.txt | nuskaitymo_failai/one_symbol2.txt | nuskaitymo_failai/one_symbol3.txt | nuskaitymo_failai/one_symbol4.txt | nuskaitymo_failai/random1.txt | nuskaitymo_failai/random2.txt | nuskaitymo_failai/similar1a.txt | nuskaitymo_failai/similar1b.txt | nuskaitymo_failai/similar2a.txt | nuskaitymo_failai/similar2b.txt |
+| :-------------- | :-------------------------: | :-------------------------------: | :-------------------------------: | :-------------------------------: | :-------------------------------: | :---------------------------: | :---------------------------: | :-----------------------------: | :-----------------------------: | :-----------------------------: | :-----------------------------: |
+| Failas:         | nuskaitymo_failai/empty.txt | nuskaitymo_failai/one_symbol1.txt | nuskaitymo_failai/one_symbol2.txt | nuskaitymo_failai/one_symbol3.txt | nuskaitymo_failai/one_symbol4.txt | nuskaitymo_failai/random1.txt | nuskaitymo_failai/random2.txt | nuskaitymo_failai/similar1a.txt | nuskaitymo_failai/similar1b.txt | nuskaitymo_failai/similar2a.txt | nuskaitymo_failai/similar2b.txt |
+| AES Hash ilgis: |        32 simboliai         |           32 simboliai            |           32 simboliai            |           32 simboliai            |           32 simboliai            |         32 simboliai          |         32 simboliai          |          32 simboliai           |          32 simboliai           |          32 simboliai           |          32 simboliai           |
+| TOY Hash ilgis: |         16 simbolių         |            16 simbolių            |            16 simbolių            |            16 simbolių            |            16 simbolių            |          16 simbolių          |          16 simbolių          |           16 simbolių           |           16 simbolių           |           16 simbolių           |           16 simbolių           |
 
 # Deterministiškumas
 
@@ -119,11 +121,12 @@ Rezultatai atsiras faile test_hash.py
 
 Šis testas tikrina hash'avimo greitį augant įvesties dydžiui - matuojama, kiek laiko hash'uojamos ,,konstitucija.txt“ failo 1, 2, 4, 8, 16, 32, 64, 128, 256, 512 ir tada viso failo eilutės. Testas buvo atliktas kelis kartus - lentelėje ir grafike vaizduojamas 3 testų vidurkis.
 
-| Efektyvumo testo rezultatas |          |           |           |           |            |            |            |             |             |             |                            |
-| :-------------------------- | :------: | :-------: | --------- | --------- | ---------- | ---------- | ---------- | ----------- | ----------- | ----------- | -------------------------- |
-| Eilučių kiekis:             | 1 eilutė | 2 eilutės | 4 eilutės | 8 eilutės | 16 eilutės | 32 eilutės | 64 eilutės | 128 eilutės | 256 eilutės | 512 eilutės | Visas failas (789 eilutės) |
-| AES laikas (sek.):          | 0.000000 | 0.000000  | 0.000000  | 0.001257  | 0.000000   | 0.001002   | 0.002071   | 0.004241    | 0.010296    | 0.023281    | 0.043517                   |
-| TOY laikas (sek.):          | 0.000458 | 0.000000  | 0.000000  | 0.000000  | 0.000000   | 0.001012   | 0.000000   | 0.001027    | 0.002012    | 0.005755    | 0.009396                   |
+#### Efektyvumo testo rezultatas
+
+| Eilučių kiekis:    | 1 eilutė | 2 eilutės | 4 eilutės | 8 eilutės | 16 eilutės | 32 eilutės | 64 eilutės | 128 eilutės | 256 eilutės | 512 eilutės | Visas failas (789 eilutės) |
+| :----------------- | :------: | :-------: | --------- | --------- | ---------- | ---------- | ---------- | ----------- | ----------- | ----------- | -------------------------- |
+| AES laikas (sek.): | 0.000000 | 0.000000  | 0.000000  | 0.001257  | 0.000000   | 0.001002   | 0.002071   | 0.004241    | 0.010296    | 0.023281    | 0.043517                   |
+| TOY laikas (sek.): | 0.000458 | 0.000000  | 0.000000  | 0.000000  | 0.000000   | 0.001012   | 0.000000   | 0.001027    | 0.002012    | 0.005755    | 0.009396                   |
 
 # Kolizijų paieša
 
