@@ -2,6 +2,7 @@ from Crypto.Cipher import AES
 import os
 import sys
 from typing import Union
+import hashlib
 
 BLOCK = 16
 
@@ -83,6 +84,16 @@ def toy_hash(data: Union[str, bytes], seed: int = 0) -> int:
 
 def toy_hash_hex(data: Union[str, bytes], seed: int = 0) -> str:
     return f"{toy_hash(data, seed):016x}"
+#SHA-256 hash
+
+def sha256_hash(data: Union[str, bytes]) -> bytes:
+    if isinstance(data, str):
+        data = data.encode("utf-8")
+    return hashlib.sha256(data).digest()
+
+def sha256_hash_hex(data: Union[str, bytes]) -> str:
+    return sha256_hash(data).hex()
+
 
 def main():
     if len(sys.argv) > 1:
@@ -93,17 +104,18 @@ def main():
 
         flag = None
         if len(flags) > 1:
-            known_flags = [f for f in flags if f.lower() in ("--aes", "--toy")]
+            known_flags = [f for f in flags if f.lower() in ("--aes", "--toy", "--sha256")]
             if len(known_flags) > 1:
-                print("Negalite naudoti kelių hash funkcijų vienu metu. Naudosime paskutinį žinomą flag'ą:", known_flags[-1])
+                print("Negalite naudoti kelių hash funkcijų vienu metu. Naudosime paskutinį žinomą flag'ą:",
+                      known_flags[-1])
                 flag = known_flags[-1].lower()
             elif len(known_flags) == 1:
                 flag = known_flags[0].lower()
             else:
-                print("Nėra žinomų flag'ų. Galimi flag'ai: --aes, --toy")
+                print("Nėra žinomų flag'ų. Galimi flag'ai: --aes, --toy, --sha256")
                 flag = None
         elif len(flags) == 1:
-            if flags[0].lower() in ("--aes", "--toy"):
+            if flags[0].lower() in ("--aes", "--toy", "--sha256"):
                 flag = flags[0].lower()
             else:
                 print("Nežinomas flag'as:", flags[0])
@@ -120,17 +132,24 @@ def main():
                     file_data = choose_file("nuskaitymo_failai")
                     if flag is None:
                         while True:
-                            g = input("Pasirinkite hash (1 - AES, 2 - Toy): ")
-                            if g in ("1","2"):
+                            g = input("Pasirinkite hash (1 - AES, 2 - Toy, 3 - SHA256): ")
+                            if g in ("1", "2", "3"):
                                 break
                             print("Neteisinga įvestis.")
                         if g == "1":
                             digest_hex = aes_hashing(file_data).hex()
-                        else:
+                        elif g == "2":
                             digest_hex = toy_hash_hex(file_data)
+                        else:
+                            digest_hex = sha256_hash_hex(file_data)
                     else:
-                        digest_hex = aes_hashing(file_data).hex() if flag=="--aes" else toy_hash_hex(file_data)
-                    with open("output.txt","w") as fout:
+                        if flag == "--aes":
+                            digest_hex = aes_hashing(file_data).hex()
+                        elif flag == "--toy":
+                            digest_hex = toy_hash_hex(file_data)
+                        else:
+                            digest_hex = sha256_hash_hex(file_data)
+                    with open("output.txt", "w") as fout:
                         fout.write(digest_hex)
                     print("Hash:", digest_hex)
                     return
@@ -138,17 +157,24 @@ def main():
                     txt = input("Įveskite žinutę: ")
                     if flag is None:
                         while True:
-                            g = input("Pasirinkite hash (1 - AES, 2 - Toy): ")
-                            if g in ("1","2"):
+                            g = input("Pasirinkite hash (1 - AES, 2 - Toy, 3 - SHA256): ")
+                            if g in ("1", "2", "3"):
                                 break
                             print("Neteisinga įvestis.")
                         if g == "1":
                             digest_hex = aes_hashing(txt.encode("utf-8")).hex()
-                        else:
+                        elif g == "2":
                             digest_hex = toy_hash_hex(txt)
+                        else:
+                            digest_hex = sha256_hash_hex(txt)
                     else:
-                        digest_hex = aes_hashing(txt.encode("utf-8")).hex() if flag=="--aes" else toy_hash_hex(txt)
-                    with open("output.txt","w") as fout:
+                        if flag == "--aes":
+                            digest_hex = aes_hashing(txt.encode("utf-8")).hex()
+                        elif flag == "--toy":
+                            digest_hex = toy_hash_hex(txt)
+                        else:
+                            digest_hex = sha256_hash_hex(txt)
+                    with open("output.txt", "w") as fout:
                         fout.write(digest_hex)
                     print("Hash:", digest_hex)
                     return
@@ -158,8 +184,8 @@ def main():
         global_choice = None
         if flag is None:
             while True:
-                global_choice = input("Pasirinkite hash funkciją visiems failams (1 - AES, 2 - Toy): ")
-                if global_choice in ["1", "2"]:
+                global_choice = input("Pasirinkite hash funkciją visiems failams (1 - AES, 2 - Toy, 3 - SHA256): ")
+                if global_choice in ["1", "2", "3"]:
                     break
                 print("Neteisinga įvestis, bandykite dar kartą.")
 
@@ -186,6 +212,8 @@ def main():
                     digest_hex = aes_hashing(user_message).hex()
                 elif flag == "--toy" or global_choice == "2":
                     digest_hex = toy_hash_hex(user_message)
+                elif flag == "--sha256" or global_choice == "3":
+                    digest_hex = sha256_hash_hex(user_message)
 
                 outfile.write(f"{file_path}: {digest_hex}\n")
                 print(f"Failas: {file_path}")
@@ -194,10 +222,10 @@ def main():
 
         print("Visi hash išsaugoti faile:", output_file)
         return
-    
+
     else:
         while True:
-            choice = input("1 - AES hash, 2 - Toy hash: ")
+            choice = input("1 - AES hash, 2 - Toy hash, 3 - SHA256 hash: ")
 
             if choice == "1":
                 while True:
@@ -232,6 +260,23 @@ def main():
 
                 break
 
+            elif choice == "3":
+                while True:
+                    sub_choice = input("1 - įvedimas ranka, 2 - skaitymas iš failo: ")
+
+                    if sub_choice == "1":
+                        user_message = input("Įveskite žinutę SHA256 skaičiavimui: ")
+                        digest_hex = sha256_hash_hex(user_message)
+                        break
+                    elif sub_choice == "2":
+                        file_data = choose_file("nuskaitymo_failai")
+                        digest_hex = sha256_hash_hex(file_data)
+                        break
+                    else:
+                        print("Neteisinga įvestis, bandykite dar kartą.")
+
+                break
+
             else:
                 print("Neteisinga įvestis, bandykite dar kartą.")
 
@@ -241,6 +286,7 @@ def main():
 
     print("Hash:", digest_hex)
     print("Hash išsaugotas faile:", output_file)
+
 
 if __name__ == "__main__":
     main()
