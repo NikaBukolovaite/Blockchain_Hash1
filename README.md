@@ -174,43 +174,41 @@ Rezultatai atsiras faile test_hash.py
 
 Šis testas tikrina, ar hash išvestis keičiasi pridėjus atsitiktinį ,,salt“ ir, ar yra sunku grąžinti į pradinę reikšmę. Šis testas hash'uoja tą pačią žinutę be ir su papildomu ,,salt“, todėl jei hash'ai yra visiškai sirtingi - tai įrodo, kad negrįžtamumos testas sėkmingas.
 
-| Negrįžtamumo testo rezultatai |                                                                  |
-| :---------------------------- | ---------------------------------------------------------------: |
-| Originalus tekstas:           |                                LabaiSlaptasSlaptazodis1234567890 |
-| Naudota salt:                 |                                                          WRTv8WL |
-| AES hash be salt:             |                                 85d811f4e14454723aee506a64f25139 |
-| AES hash su salt:             |                                 7015b72a290f5f1d29308a9a5b0ded22 |
-| TOY hash be salt:             |                                                 81ba629eb5263a7b |
-| TOY hash su salt:             |                                                 95fa1e175659c697 |
-| SHA-256 hash be salt:         | 916094e0c7ddc4333d862af6476c8fe46e187cc0fe89c15b24e98ac8e40dc4cb |
-| SHA-256 hash su salt:         | cc0e98558f8ef2f23449752ae609dff3caee193f9f044f3a3a29ba0a8ca84c4e |
-| AES skiriasi:                 |                                                             True |
-| TOY skiriasi:                 |                                                             True |
-| SHA-256 skiriasi:             |                                                             True |
+#### Negrįžtamumo testo rezultatai
 
-# AES ir TOY hash palyginimas
+| Parametras / Aprašymas |                                             Reikšmė / Rezultatas |
+| :--------------------- | ---------------------------------------------------------------: |
+| Originalus tekstas:    |                                LabaiSlaptasSlaptazodis1234567890 |
+| Naudota salt:          |                                                          WRTv8WL |
+| AES hash be salt:      |                                 85d811f4e14454723aee506a64f25139 |
+| AES hash su salt:      |                                 7015b72a290f5f1d29308a9a5b0ded22 |
+| TOY hash be salt:      |                                                 81ba629eb5263a7b |
+| TOY hash su salt:      |                                                 95fa1e175659c697 |
+| SHA-256 hash be salt:  | 916094e0c7ddc4333d862af6476c8fe46e187cc0fe89c15b24e98ac8e40dc4cb |
+| SHA-256 hash su salt:  | cc0e98558f8ef2f23449752ae609dff3caee193f9f044f3a3a29ba0a8ca84c4e |
+| AES skiriasi:          |                                                             True |
+| TOY skiriasi:          |                                                             True |
+| SHA-256 skiriasi:      |                                                             True |
 
-| Savybė              |                               AES hash                                |                                TOY hash                                 |
-| :------------------ | :-------------------------------------------------------------------: | :---------------------------------------------------------------------: |
-| Išvedimo ilgis      |                        32 simboliai(128 bitai)                        |                         16 simbolių (64 bitai)                          |
-| Deterministiškumas  |                                  Yra                                  |                                   Yra                                   |
-| Greitis             | Lėtesnis (789 eilučių failą hash'uoja vidutiniškai per 0.043517 sek.) | Greitesnis (789 eilučių failą hash'uoja vidutiniškai per 0.009396 sek.) |
-| Kolizijų atsparumas |                             Labai aukštas                             |                              Labai aukštas                              |
-| Lavinos efektas     |                              Labai geras                              |                               Gana geras                                |
-| Negrįžtamumas       |                                Stiprus                                |                  Silpnesnis (daugiau simbolių sutampa)                  |
+# AES, TOY ir SHA-256 hash palyginimas
 
-- AES hash – saugesnis ir atsparesnis atakoms, nes turi ilgesnę išvestį, geresnį lavinos efektą ir aukštą negrįžtamumą.
-- TOY hash – greitesnis, bet mažiau saugus, nes turi trumpesnę išvestį, bet ne toks geras lavinos efektas ir negrįžtamumas.
+| Savybė              |                               AES Hash                                |                                TOY Hash                                 |          SHA-256 Hash          |
+| :------------------ | :-------------------------------------------------------------------: | :---------------------------------------------------------------------: | :----------------------------: |
+| Išvedimo ilgis      |                        32 simboliai(128 bitai)                        |                         16 simbolių (64 bitai)                          |    64 simboliai (256 bitai)    |
+| Deterministiškumas  |                                  Yra                                  |                                   Yra                                   |              Yra               |
+| Greitis             | Lėtesnis (789 eilučių failą hash'uoja vidutiniškai per 0.043517 sek.) | Greitesnis (789 eilučių failą hash'uoja vidutiniškai per 0.009396 sek.) | Labai greitas (~0.000000 sek.) |
+| Kolizijų atsparumas |                             Labai aukštas                             |                              Labai aukštas                              |         Labai aukštas          |
+| Lavinos efektas     |                              Labai geras                              |                               Gana geras                                |          Labai geras           |
+| Negrįžtamumas       |                                Stiprus                                |                  Silpnesnis (daugiau simbolių sutampa)                  |         Labai stiprus          |
+
+- AES hash – generuoja gana ilgą išvestį ir pasižymi stipriomis kriptografinėmis savybėmis. Jis lėtesnis už TOY, bet užtikrina geresnį lavinos efektą ir atsparumą atakoms.
+- TOY hash – žymiai greitesnis ir lengvesnis, tačiau dėl trumpesnės išvesties ir didesnio lavinos efekto svyravimo jis laikomas mažiau saugiu. Jis tiktų testavimui, eksperimentams ar mažiau svarbiems duomenims, bet ne realiose sistemose.
+- SHA-256 hash – standartinis, plačiai pripažintas kriptografinis hash algoritmas. Jis pasižymi puikiu balansu tarp saugumo, našumo ir lavinos efekto. Tai saugiausias ir universaliausias pasirinkimas realioms sistemoms.
 
 # Išvados
 
-Atlikti testai patvirtina, kad abi funkcijos atitinka pagrindines hash savybes:
+Po atliktų testų galime daryti aiškias išvadas apie trijų hash funkcijų – AES, TOY ir SHA-256 – savybes ir pritaikymą praktikoje. Visi jie atitinka pagrindinius hash funkcijų kriterijus: išvesties dydis yra pastovus, rezultatai deterministiniai, kolizijų nerasta, lavinos efektas ryškus, o atvirkštinis atkodavimas – neįmanomas.
 
-- Išvedimo dydis
-- Deterministiškumas
-- Efektyvumas
-- Kolizijos
-- Lavinos efektas
-- Negrįžtamumas
+SHA-256 išsiskiria kaip saugiausias sprendimas: jis generuoja ilgiausią išvestį, turi stipriausią lavinos efektą ir aukščiausią atsparumą atakoms. AES taip pat pasižymi aukštu saugumo lygiu ir patikimu veikimu, nors veikia šiek tiek lėčiau ir generuoja trumpesnį hash. Tuo tarpu TOY yra greičiausias, tačiau dėl trumpesnės išvesties ir silpnesnio negrįžtamumo jis tinkamiausias mokymosi ar eksperimentiniams tikslams.
 
-Vis dėlto, dėl didesnio saugumo AES pagrįstas hash yra tinkamesnis.
+Apibendrinant, šis tyrimas parodė, kad praktiniam naudojimui saugumo požiūriu optimaliausi yra SHA-256 ir AES, o TOY gali būti laikomas supaprastintu, edukaciniu pavyzdžiu.
