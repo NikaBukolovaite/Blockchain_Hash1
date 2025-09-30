@@ -103,40 +103,40 @@ def run_tests():
     else:
         results.append(f"Failas nerastas: {test_file}")
 
-        # --- Kolizijų paieškos testas ---
-        results.append("\n---Kolizijų paieškos testas---")
-        lengths = [10, 100, 500, 1000]
-        for length in lengths:
-            aes_collisions = 0
-            toy_collisions = 0
-            sha256_collisions = 0
-            total_pairs = 10000  # sumažinta, kad testai nebūtų per lėti
+     # --- Kolizijų paieškos testas ---
+    results.append("\n---Kolizijų paieškos testas---")
+    lengths = [10, 100, 500, 1000]
+    for length in lengths:
+        aes_collisions = 0
+        toy_collisions = 0
+        sha256_collisions = 0
+        total_pairs = 100000  
 
-            for _ in range(total_pairs):
-                s1 = ''.join(random.choices(string.ascii_letters + string.digits, k=length)).encode('utf-8')
-                s2 = ''.join(random.choices(string.ascii_letters + string.digits, k=length)).encode('utf-8')
+        for _ in range(total_pairs):
+            s1 = ''.join(random.choices(string.ascii_letters + string.digits, k=length)).encode('utf-8')
+            s2 = ''.join(random.choices(string.ascii_letters + string.digits, k=length)).encode('utf-8')
 
-                if s1 == s2:  # praleidžiam identiškus
-                    continue
+            if s1 == s2:  # praleidžiam identiškus
+                continue
 
-                aes1 = aes_hashing(s1).hex()
-                aes2 = aes_hashing(s2).hex()
-                toy1 = toy_hash_hex(s1)
-                toy2 = toy_hash_hex(s2)
-                sha1 = sha256_hash_hex(s1)
-                sha2 = sha256_hash_hex(s2)
+            aes1 = aes_hashing(s1).hex()
+            aes2 = aes_hashing(s2).hex()
+            toy1 = toy_hash_hex(s1)
+            toy2 = toy_hash_hex(s2)
+            sha1 = sha256_hash_hex(s1)
+            sha2 = sha256_hash_hex(s2)
 
-                if aes1 == aes2:
-                    aes_collisions += 1
-                if toy1 == toy2:
-                    toy_collisions += 1
-                if sha1 == sha2:
-                    sha256_collisions += 1
+            if aes1 == aes2:
+                aes_collisions += 1
+            if toy1 == toy2:
+                toy_collisions += 1
+            if sha1 == sha2:
+                sha256_collisions += 1
 
-            results.append(
-                f"Ilgis: {length} simbolių, Iš viso porų: {total_pairs}, "
-                f"AES kolizijos: {aes_collisions}, TOY kolizijos: {toy_collisions}, SHA-256 kolizijos: {sha256_collisions}"
-            )
+        results.append(
+            f"Ilgis: {length} simbolių, Iš viso porų: {total_pairs}, "
+            f"AES kolizijos: {aes_collisions}, TOY kolizijos: {toy_collisions}, SHA-256 kolizijos: {sha256_collisions}"
+        )
 
     # Lavinos efekto testas
     results.append("\n---Lavinos efekto testas---")

@@ -102,10 +102,19 @@ Rezultatai atsiras faile test_hash.py
 
 #### Išvedimo dydžio testo rezultatai
 
-| Failas:         | nuskaitymo_failai/empty.txt | nuskaitymo_failai/one_symbol1.txt | nuskaitymo_failai/one_symbol2.txt | nuskaitymo_failai/one_symbol3.txt | nuskaitymo_failai/one_symbol4.txt | nuskaitymo_failai/random1.txt | nuskaitymo_failai/random2.txt | nuskaitymo_failai/similar1a.txt | nuskaitymo_failai/similar1b.txt | nuskaitymo_failai/similar2a.txt | nuskaitymo_failai/similar2b.txt |
-| :-------------- | :-------------------------: | :-------------------------------: | :-------------------------------: | :-------------------------------: | :-------------------------------: | :---------------------------: | :---------------------------: | :-----------------------------: | :-----------------------------: | :-----------------------------: | :-----------------------------: |
-| AES Hash ilgis: |        32 simboliai         |           32 simboliai            |           32 simboliai            |           32 simboliai            |           32 simboliai            |         32 simboliai          |         32 simboliai          |          32 simboliai           |          32 simboliai           |          32 simboliai           |          32 simboliai           |
-| TOY Hash ilgis: |         16 simbolių         |            16 simbolių            |            16 simbolių            |            16 simbolių            |            16 simbolių            |          16 simbolių          |          16 simbolių          |           16 simbolių           |           16 simbolių           |           16 simbolių           |           16 simbolių           |
+| Failas                            | AES Hash ilgis | TOY Hash ilgis | SHA-256 Hash ilgis |
+| :-------------------------------- | :------------: | :------------: | :----------------: |
+| nuskaitymo_failai/empty.txt       |  32 simboliai  |  16 simbolių   |    64 simboliai    |
+| nuskaitymo_failai/one_symbol1.txt |  32 simboliai  |  16 simbolių   |    64 simboliai    |
+| nuskaitymo_failai/one_symbol2.txt |  32 simboliai  |  16 simbolių   |    64 simboliai    |
+| nuskaitymo_failai/one_symbol3.txt |  32 simboliai  |  16 simbolių   |    64 simboliai    |
+| nuskaitymo_failai/one_symbol4.txt |  32 simboliai  |  16 simbolių   |    64 simboliai    |
+| nuskaitymo_failai/random1.txt     |  32 simboliai  |  16 simbolių   |    64 simboliai    |
+| nuskaitymo_failai/random2.txt     |  32 simboliai  |  16 simbolių   |    64 simboliai    |
+| nuskaitymo_failai/similar1a.txt   |  32 simboliai  |  16 simbolių   |    64 simboliai    |
+| nuskaitymo_failai/similar1b.txt   |  32 simboliai  |  16 simbolių   |    64 simboliai    |
+| nuskaitymo_failai/similar2a.txt   |  32 simboliai  |  16 simbolių   |    64 simboliai    |
+| nuskaitymo_failai/similar2b.txt   |  32 simboliai  |  16 simbolių   |    64 simboliai    |
 
 # Deterministiškumas
 
@@ -122,10 +131,19 @@ Rezultatai atsiras faile test_hash.py
 
 #### Efektyvumo testo rezultatas
 
-| Eilučių kiekis:    | 1 eilutė | 2 eilutės | 4 eilutės | 8 eilutės | 16 eilutės | 32 eilutės | 64 eilutės | 128 eilutės | 256 eilutės | 512 eilutės | Visas failas (789 eilutės) |
-| :----------------- | :------: | :-------: | --------- | --------- | ---------- | ---------- | ---------- | ----------- | ----------- | ----------- | -------------------------- |
-| AES laikas (sek.): | 0.000000 | 0.000000  | 0.000000  | 0.001257  | 0.000000   | 0.001002   | 0.002071   | 0.004241    | 0.010296    | 0.023281    | 0.043517                   |
-| TOY laikas (sek.): | 0.000458 | 0.000000  | 0.000000  | 0.000000  | 0.000000   | 0.001012   | 0.000000   | 0.001027    | 0.002012    | 0.005755    | 0.009396                   |
+| Eilučių kiekis             | AES Hash laikas (sek.) | TOY Hash laikas (sek.) | SHA-256 Hash laikas (sek.) |
+| :------------------------- | :--------------------: | :--------------------: | :------------------------: |
+| 1 eilutė                   |        0.000000        |        0.000458        |          0.000000          |
+| 2 eilutės                  |        0.000000        |        0.000000        |          0.000000          |
+| 4 eilutės                  |        0.000000        |        0.000000        |          0.000000          |
+| 8 eilutės                  |        0.001257        |        0.000000        |          0.000000          |
+| 16 eilučių                 |        0.000000        |        0.000000        |          0.000000          |
+| 32 eilutės                 |        0.001002        |        0.001012        |          0.000000          |
+| 64 eilutės                 |        0.002071        |        0.000000        |          0.000000          |
+| 128 eilutės                |        0.004241        |        0.001027        |          0.000000          |
+| 256 eilutės                |        0.010296        |        0.002012        |          0.000000          |
+| 512 eilučių                |        0.023281        |        0.005755        |          0.000000          |
+| Visas failas (789 eilutės) |        0.063517        |        0.009396        |          0.000000          |
 
 # Kolizijų paieša
 
@@ -133,12 +151,12 @@ Rezultatai atsiras faile test_hash.py
 
 #### Kolizijų paieškos testo rezultatas
 
-| Vieno string poroje ilgis: | AES kolizijos | TOY kolizijos |
-| :------------------------- | :-----------: | :-----------: |
-| 10                         |       0       |       0       |
-| 100                        |       0       |       0       |
-| 500                        |       0       |       0       |
-| 1000                       |       0       |       0       |
+| Vieno string poroje ilgis: | AES kolizijos | TOY kolizijos | SHA-256 kolizijos |
+| :------------------------- | :-----------: | :-----------: | :---------------: |
+| 10                         |       0       |       0       |         0         |
+| 100                        |       0       |       0       |         0         |
+| 500                        |       0       |       0       |         0         |
+| 1000                       |       0       |       0       |         0         |
 
 # Lavinos efektas
 
@@ -146,26 +164,29 @@ Rezultatai atsiras faile test_hash.py
 
 #### Lavinos efekto testo rezultatai
 
-| Koks skirtumas: | AES HEX | TOY HEX | AES BIT | TOY BIT |
-| :-------------- | :-----: | :-----: | :-----: | :-----: |
-| Vidutinis       | 93.77%  | 92.86%  | 50.00%  | 49.52%  |
-| Minimalus       | 68.75%  | 25.00%  | 31.25%  |  7.81%  |
-| Maksimalus      | 100.00% | 100.00% | 67.97%  | 79.69%  |
+| Koks skirtumas: | AES HEX | TOY HEX | SHA-256 HEX | AES BIT | TOY BIT | SHA-256 BIT |
+| :-------------- | :-----: | :-----: | :---------: | :-----: | :-----: | :---------: |
+| Vidutinis       | 93.77%  | 92.86%  |   93.76%    | 50.00%  | 49.52%  |   50.00%    |
+| Minimalus       | 68.75%  | 25.00%  |   78.12%    | 31.25%  |  7.81%  |   37.11%    |
+| Maksimalus      | 100.00% | 100.00% |   100.00%   | 67.97%  | 79.69%  |   63.67%    |
 
 # Negrįžtamumo demonstracija
 
 Šis testas tikrina, ar hash išvestis keičiasi pridėjus atsitiktinį ,,salt“ ir, ar yra sunku grąžinti į pradinę reikšmę. Šis testas hash'uoja tą pačią žinutę be ir su papildomu ,,salt“, todėl jei hash'ai yra visiškai sirtingi - tai įrodo, kad negrįžtamumos testas sėkmingas.
 
-| Negrįžtamumo testo rezultatai |                                   |
-| :---------------------------- | --------------------------------: |
-| Originalus tekstas:           | LabaiSlaptasSlaptazodis1234567890 |
-| Naudota salt:                 |                         lKS2dSRmQ |
-| AES hash be salt:             |  85d811f4e14454723aee506a64f25139 |
-| AES hash su salt:             |  5807982f06e01d42e5269c7b7f527811 |
-| TOY hash be salt:             |                  81ba629eb5263a7b |
-| TOY hash su salt:             |                  c418db9e0ea84a7a |
-| AES skiriasi:                 |                              True |
-| TOY skiriasi:                 |                              True |
+| Negrįžtamumo testo rezultatai |                                                                  |
+| :---------------------------- | ---------------------------------------------------------------: |
+| Originalus tekstas:           |                                LabaiSlaptasSlaptazodis1234567890 |
+| Naudota salt:                 |                                                          WRTv8WL |
+| AES hash be salt:             |                                 85d811f4e14454723aee506a64f25139 |
+| AES hash su salt:             |                                 7015b72a290f5f1d29308a9a5b0ded22 |
+| TOY hash be salt:             |                                                 81ba629eb5263a7b |
+| TOY hash su salt:             |                                                 95fa1e175659c697 |
+| SHA-256 hash be salt:         | 916094e0c7ddc4333d862af6476c8fe46e187cc0fe89c15b24e98ac8e40dc4cb |
+| SHA-256 hash su salt:         | cc0e98558f8ef2f23449752ae609dff3caee193f9f044f3a3a29ba0a8ca84c4e |
+| AES skiriasi:                 |                                                             True |
+| TOY skiriasi:                 |                                                             True |
+| SHA-256 skiriasi:             |                                                             True |
 
 # AES ir TOY hash palyginimas
 
