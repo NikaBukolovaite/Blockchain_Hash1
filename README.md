@@ -133,17 +133,17 @@ Rezultatai atsiras faile test_hash.py
 
 | Eilučių kiekis             | AES Hash laikas (sek.) | TOY Hash laikas (sek.) | SHA-256 Hash laikas (sek.) |
 | :------------------------- | :--------------------: | :--------------------: | :------------------------: |
-| 1 eilutė                   |        0.000000        |        0.000458        |          0.000000          |
-| 2 eilutės                  |        0.000000        |        0.000000        |          0.000000          |
-| 4 eilutės                  |        0.000000        |        0.000000        |          0.000000          |
-| 8 eilutės                  |        0.001257        |        0.000000        |          0.000000          |
-| 16 eilučių                 |        0.000000        |        0.000000        |          0.000000          |
-| 32 eilutės                 |        0.001002        |        0.001012        |          0.000000          |
-| 64 eilutės                 |        0.002071        |        0.000000        |          0.000000          |
-| 128 eilutės                |        0.004241        |        0.001027        |          0.000000          |
-| 256 eilutės                |        0.010296        |        0.002012        |          0.000000          |
-| 512 eilučių                |        0.023281        |        0.005755        |          0.000000          |
-| Visas failas (789 eilutės) |        0.063517        |        0.009396        |          0.000000          |
+| 1 eilutė                   |        0.000000        |        0.000458        |          0.000005          |
+| 2 eilutės                  |        0.000000        |        0.000000        |          0.000001          |
+| 4 eilutės                  |        0.000000        |        0.000000        |          0.000002         |
+| 8 eilutės                  |        0.001257        |        0.000000        |          0.000001          |
+| 16 eilučių                 |        0.000000        |        0.000000        |          0.000002          |
+| 32 eilutės                 |        0.001002        |        0.001012        |          0.000002          |
+| 64 eilutės                 |        0.002071        |        0.000000        |          0.000006          |
+| 128 eilutės                |        0.004241        |        0.001027        |          0.000023          |
+| 256 eilutės                |        0.010296        |        0.002012        |          0.000033          |
+| 512 eilučių                |        0.023281        |        0.005755        |          0.000046          |
+| Visas failas (789 eilutės) |        0.063517        |        0.009396        |          0.000071          |
 
 # Kolizijų paieša
 
@@ -212,3 +212,4 @@ Po atliktų testų galime daryti aiškias išvadas apie trijų hash funkcijų �
 SHA-256 išsiskiria kaip saugiausias sprendimas: jis generuoja ilgiausią išvestį, turi stipriausią lavinos efektą ir aukščiausią atsparumą atakoms. AES taip pat pasižymi aukštu saugumo lygiu ir patikimu veikimu, nors veikia šiek tiek lėčiau ir generuoja trumpesnį hash. Tuo tarpu TOY yra greičiausias, tačiau dėl trumpesnės išvesties ir silpnesnio negrįžtamumo jis tinkamiausias mokymosi ar eksperimentiniams tikslams.
 
 Apibendrinant, šis tyrimas parodė, kad praktiniam naudojimui saugumo požiūriu optimaliausi yra SHA-256 ir AES, o TOY gali būti laikomas supaprastintu, edukaciniu pavyzdžiu.
+
