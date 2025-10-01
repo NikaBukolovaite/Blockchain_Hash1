@@ -9,6 +9,50 @@
 
 Programa gali veikti tiek per komandinės eilutės argumentus, tiek per interaktyvų meniu.
 
+# Pseudokodas
+
+CONSTANT BLOCK_SIZE ← 16
+CONSTANT IV_LEFT ← hex value "0123456789abcdeffedcba9876543210"
+CONSTANT IV_RIGHT ← hex value "fedcba98765432100123456789abcdef"
+CONSTANT FINAL_CONST ← hex value "ffffffffffffffffffffffffffffffff"
+
+FUNCTION padMessage(message)
+L ← LENGTH(message)
+messageInBits ← L × 8
+padded ← message + "80"  
+ numZeros ← (16 - (LENGTH(padded) + 8) MOD 16) MOD 16
+padded ← padded + numZeros × "00"  
+ padded ← padded + TO_BYTES(messageInBits, 8)
+RETURN padded
+END FUNCTION
+
+FUNCTION xorBytes(a, b)
+IF LENGTH(a) ≠ LENGTH(b) THEN
+RAISE ERROR "Lengths must match"
+END IF
+result ← EMPTY
+FOR i ← 0 TO LENGTH(a) - 1
+result ← result + (a[i] XOR b[i])
+END FOR
+RETURN result
+END FUNCTION
+
+FUNCTION aesHashing(message)
+stateLeft ← IV_LEFT
+stateRight ← IV_RIGHT
+paddedMessage ← padMessage(message)
+
+    FOR each 16-byte block Mi in paddedMessage
+        encrypted ← AES_ENCRYPT(stateRight, key = stateLeft)
+        stateRight ← xorBytes(encrypted, Mi)
+        SWAP(stateLeft, stateRight)
+    END FOR
+
+    finalEnc ← AES_ENCRYPT(FINAL_CONST, key = stateLeft)
+    RETURN finalEnc
+
+END FUNCTION
+
 # 📃 Naudojimo instrukcijos
 
 ## Programos paleidimas
@@ -214,4 +258,3 @@ Po atliktų testų galime daryti aiškias išvadas apie trijų hash funkcijų �
 SHA-256 išsiskiria kaip saugiausias sprendimas: jis generuoja ilgiausią išvestį, turi stipriausią lavinos efektą ir aukščiausią atsparumą atakoms. AES taip pat pasižymi aukštu saugumo lygiu ir patikimu veikimu, nors veikia šiek tiek lėčiau ir generuoja trumpesnį hash. Tuo tarpu TOY yra greičiausias, tačiau dėl trumpesnės išvesties ir silpnesnio negrįžtamumo jis tinkamiausias mokymosi ar eksperimentiniams tikslams.
 
 Apibendrinant, šis tyrimas parodė, kad praktiniam naudojimui saugumo požiūriu optimaliausi yra SHA-256 ir AES, o TOY gali būti laikomas supaprastintu, edukaciniu pavyzdžiu.
-
