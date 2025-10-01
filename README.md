@@ -11,6 +11,7 @@ Programa gali veikti tiek per komandinės eilutės argumentus, tiek per interakt
 
 # Pseudokodas
 
+```bash
 CONSTANT BLOCK_SIZE ← 16
 CONSTANT IV_LEFT ← hex value "0123456789abcdeffedcba9876543210"
 CONSTANT IV_RIGHT ← hex value "fedcba98765432100123456789abcdef"
@@ -19,9 +20,9 @@ CONSTANT FINAL_CONST ← hex value "ffffffffffffffffffffffffffffffff"
 FUNCTION padMessage(message)
 L ← LENGTH(message)
 messageInBits ← L × 8
-padded ← message + "80"  
+padded ← message + "80"
  numZeros ← (16 - (LENGTH(padded) + 8) MOD 16) MOD 16
-padded ← padded + numZeros × "00"  
+padded ← padded + numZeros × "00"
  padded ← padded + TO_BYTES(messageInBits, 8)
 RETURN padded
 END FUNCTION
@@ -52,6 +53,7 @@ paddedMessage ← padMessage(message)
     RETURN finalEnc
 
 END FUNCTION
+```
 
 # 📃 Naudojimo instrukcijos
 
