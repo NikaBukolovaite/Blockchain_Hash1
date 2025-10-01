@@ -145,7 +145,7 @@ Rezultatai atsiras faile test_hash.py
 | 512 eilučių                |        0.023281        |        0.005755        |          0.000046          |
 | Visas failas (789 eilutės) |        0.063517        |        0.009396        |          0.000071          |
 
-![imagine alt]()
+![imagine alt](https://github.com/NikaBukolovaite/Blockchain_Hash1/blob/3e9493577cab06d3c538f03cdf0d4ff879d916a4/nuotraukos/0e7a51f1-c7f6-45fd-a15e-f763a0063519.jpg)
 
 # Kolizijų paieša
 
@@ -214,3 +214,4 @@ Po atliktų testų galime daryti aiškias išvadas apie trijų hash funkcijų �
 SHA-256 išsiskiria kaip saugiausias sprendimas: jis generuoja ilgiausią išvestį, turi stipriausią lavinos efektą ir aukščiausią atsparumą atakoms. AES taip pat pasižymi aukštu saugumo lygiu ir patikimu veikimu, nors veikia šiek tiek lėčiau ir generuoja trumpesnį hash. Tuo tarpu TOY yra greičiausias, tačiau dėl trumpesnės išvesties ir silpnesnio negrįžtamumo jis tinkamiausias mokymosi ar eksperimentiniams tikslams.
 
 Apibendrinant, šis tyrimas parodė, kad praktiniam naudojimui saugumo požiūriu optimaliausi yra SHA-256 ir AES, o TOY gali būti laikomas supaprastintu, edukaciniu pavyzdžiu.
+
